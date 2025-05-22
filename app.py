@@ -21,7 +21,8 @@ GEMINI_URL = ("https://generativelanguage.googleapis.com/v1beta/"
 
 def generate_linkedin_about(what, audience, diff):
     prompt = (
-        f"You’re a creative LinkedIn copywriter. Write a concise, 3–5-paragraph “About” section (≤200 tokens) in first person, suitable for LinkedIn. Use an engaging hook, then introduce the user (“I am…”), explain what they do and who benefits, highlight their unique differentiator, and close with a friendly call-to-action.\n\n"
+        f"You are a professional LinkedIn copywriter. Write exactly one concise “About” section in first person (no more than 200 tokens total), ready to copy-and-paste directly into LinkedIn, suitable for LinkedIn. Use an engaging hook, then introduce the user (“I am…”), explain what they do and who benefits, highlight their unique differentiator, and close with a friendly call-to-action.\n"
+        f"Do not include any introductions, labels, commentary, or multiple versions—only the “About” text itself. \n"
         f"Use ONLY these facts—no invented details:\n"
         f"- What I do: {what}\n"
         f"- Target audience: {audience}\n"
