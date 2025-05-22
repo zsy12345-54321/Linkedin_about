@@ -11,12 +11,12 @@ CORS(app)  # allow AJAX from same Repl URL
 # Rate limiter: max 5 requests per day per IP
 limiter = Limiter(app=app,
                   key_func=get_remote_address,
-                  default_limits=["10 per day"])
+                  default_limits=["5 per day"])
 
 # Gemini REST endpoint & API key
 API_KEY = os.environ["GEMINI_API_KEY"]
 GEMINI_URL = ("https://generativelanguage.googleapis.com/v1beta/"
-              "models/gemini-1.5-flash:generateContent")
+              "models/gemini-2.5-flash:generateContent")
 
 
 def generate_linkedin_about(what, audience, diff):
