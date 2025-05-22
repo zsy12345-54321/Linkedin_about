@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LinkedIn About Generator</title>
+
+  <style>
+    /* Base & Container */
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      background: #fafafa;
+      color: #333;
+    }
+    .container {
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    /* Header */
+    h1 {
+      text-align: center;
+      color: #f57c00;
+      margin-bottom: 0.5rem;
+      font-size: 2rem;
+    }
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 2rem;
+      font-size: 1rem;
+    }
+
+    /* Form */
+    .generator-form .field-group {
+      margin-bottom: 1.5rem;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    .form-hint {
+      display: block;
+      font-size: 0.9rem;
+      color: #888;
+      margin-bottom: 0.5rem;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    input[type="text"]:focus {
+      outline: 2px solid #f57c00;
+      outline-offset: 2px;
+    }
+
+    /* Buttons */
+    button {
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .primary-btn {
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      background: #f57c00;
+      color: #fff;
+      margin-top: 2rem;
+      transition: background 0.2s;
+    }
+    .primary-btn:hover {
+      background: #e66a00;
+    }
+    .secondary-btn {
+      padding: 0.5rem 1rem;
+      background: #f57c00;
+      color: #fff;
+      transition: background 0.2s;
+    }
+    .secondary-btn:hover {
+      background: #e66a00;
+    }
+
+    /* Output */
+    .output-section {
+      margin-top: 2rem;
+    }
+    .output-box {
+      position: relative;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 1rem;
+    }
+    .output {
+      min-height: 100px;
+      white-space: pre-wrap;
+      color: #333;
+    }
+    #copy-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      font-size: 0.9rem;
+      border-radius: 4px;
+    }
+
+    /* Why Section */
+    .why-section {
+      margin-top: 3rem;
+    }
+    .why-section h2 {
+      color: #f57c00;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .why-section p {
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="container">
+    <h1>Generate Your LinkedIn “About” Section</h1>
+    <p class="subtitle">
+      Stand out on LinkedIn with a personalized summary. Just answer the questions below, and we’ll help you craft a professional and compelling “About” section tailored to your background and goals.
+    </p>
+
+    <form id="aboutForm" class="generator-form">
+      <div class="field-group">
+        <label for="what-you-do">Tell us a bit about what you do, or describe your main product or service.</label>
+        <small class="form-hint">
+          (e.g. “I help startups build AI-powered apps” or “We provide cloud-based accounting tools for small businesses.”)
+        </small>
+        <input type="text" id="what-you-do" name="what" required />
+      </div>
+
+      <div class="field-group">
+        <label for="audience">Who are you hoping to connect with on LinkedIn?</label>
+        <small class="form-hint">
+          (e.g. “Potential clients in healthcare,” “Other software engineers,” “Recruiters at tech companies,” etc.)
+        </small>
+        <input type="text" id="audience" name="audience" required />
+      </div>
+
+      <div class="field-group">
+        <label for="unique">What makes you or your business unique compared to others in your field?</label>
+        <small class="form-hint">
+          (e.g. “We offer personalized service,” “Our platform is faster and more secure,” “I have 10+ years of experience in machine learning,” etc.)
+        </small>
+        <input type="text" id="unique" name="diff" required />
+      </div>
+
+      <button type="submit" id="generate-btn" class="primary-btn">Generate About</button>
+    </form>
+
+    <section class="output-section">
+      <div class="output-box">
+        <div id="output-text" class="output">Your generated text will appear here…</div>
+        <button type="button" id="copy-btn" class="secondary-btn">Copy</button>
+      </div>
+    </section>
+
+    <section class="why-section">
+      <h2>Why Your LinkedIn About Section Is Essential</h2>
+
+      <section>
+        <h3>Why the LinkedIn About Section Matters</h3>
+        <p>
+          With over 1 billion professionals on LinkedIn, your About section – also known as your LinkedIn summary – 
+          isn’t just another profile field; it’s your digital elevator pitch. This brief section is often the first 
+          place recruiters, clients, or partners look to understand who you are beyond your job titles. A powerful 
+          About section helps define your professional identity, showcase your personality, and set you apart from 
+          the crowd. Neglecting it means missing out on a prime opportunity to connect on LinkedIn and make a 
+          memorable impression – potentially costing you profile visibility and engagement.
+        </p>
+      </section>
+
+      <section>
+        <h3>Strategic Benefits of a Strong About Section</h3>
+        <ul>
+          <li>
+            <strong>Personal Branding &amp; Professional Identity:</strong> Tell your career story in your own 
+            voice—making you memorable and relatable.
+          </li>
+          <li>
+            <strong>Profile Visibility &amp; Optimization:</strong> Keyword-rich summaries improve search ranking 
+            and help the right people find you.
+          </li>
+          <li>
+            <strong>Networking &amp; Engagement:</strong> A compelling narrative invites connection requests and 
+            messages, turning viewers into real conversations.
+          </li>
+          <li>
+            <strong>Thought Leadership &amp; Business Growth:</strong> Entrepreneurs and marketers can showcase 
+            successes and build trust before one-on-one meetings.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Actionable Best Practices</h3>
+        <ul>
+          <li>
+            <strong>Start with a Hook:</strong> Open with a bold statement or question to grab attention.
+          </li>
+          <li>
+            <strong>Use First-Person &amp; Be Authentic:</strong> Write conversationally and let your personality 
+            shine.
+          </li>
+          <li>
+            <strong>Highlight Achievements:</strong> Include concrete metrics (e.g., “increased revenue by 40%”).
+          </li>
+          <li>
+            <strong>Include Relevant Keywords:</strong> Naturally weave in terms like “LinkedIn profile 
+            optimization,” “personal branding,” and “professional networking.”
+          </li>
+          <li>
+            <strong>Keep It Concise:</strong> Use 3–5 short paragraphs or bullet points and plenty of whitespace.
+          </li>
+          <li>
+            <strong>End with a CTA:</strong> Invite readers to connect on LinkedIn, message you, or visit your 
+            website/portfolio.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Examples of Engaging About Sections</h3>
+        <ul>
+          <li>
+            <strong>Job Seeker:</strong> “As a senior marketing analyst with 5 years of experience turning data into 
+            impactful campaigns, I’ve boosted lead generation by 30%. Now exploring new opportunities—let’s connect!”
+          </li>
+          <li>
+            <strong>Founder:</strong> “Co-founder of FinTech ABC, I scaled our platform to 50,000+ users in three 
+            years. I share thought leadership on digital finance—connect if you’re passionate about innovation.”
+          </li>
+          <li>
+            <strong>Marketing Leader:</strong> “With over a decade in digital marketing, I’ve driven campaigns that 
+            doubled engagement and delivered strong ROI. Let’s network and swap insights on high-impact strategies.”
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <p>
+          Crafting a standout LinkedIn About section is easier than you think. Use our LinkedIn About Generator tool to 
+          jumpstart your personal branding and create a profile summary that truly reflects you. Don’t let your LinkedIn 
+          profile blend in—optimize your About section now and watch your networking and profile visibility soar!
+        </p>
+      </section>
+    </section>
+
+  </main>
+
+  <script>
+    const form = document.getElementById('aboutForm');
+    const resultDiv = document.getElementById('output-text');
+    const copyBtn = document.getElementById('copy-btn');
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const whatVal = form.what.value.trim();
+      const audienceVal = form.audience.value.trim();
+      const diffVal = form.diff.value.trim();
+
+      if (!whatVal || !audienceVal || !diffVal) {
+        resultDiv.textContent = '⚠️ Please fill in all fields.';
+        return;
+      }
+      resultDiv.textContent = 'Generating…';
+
+      try {
+        const res = await fetch('/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ what: whatVal, audience: audienceVal, diff: diffVal })
+        });
+        const data = await res.json();
+        resultDiv.textContent = data.error ? `Error: ${data.error}` : data.result;
+      } catch(err) {
+        resultDiv.textContent = `Fetch error: ${err}`;
+      }
+    });
+
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(resultDiv.textContent)
+        .then(() => copyBtn.textContent = 'Copied!')
+        .catch(() => copyBtn.textContent = 'Failed');
+      setTimeout(() => copyBtn.textContent = 'Copy', 1500);
+    });
+  </script>
+
+</body>
+</html>
