@@ -70,7 +70,7 @@ async def index(request: Request):
 
 
 @app.post("/generate")
-@limiter.limit("10/day")
+@limiter.limit("5/day")
 async def generate(request: Request):
     body = await request.json()
     what = body.get("what")
