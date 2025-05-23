@@ -9,7 +9,7 @@ from slowapi import Limiter
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from slowapi.util import get_remote_address
-
+from openai import OpenAI
 # Initialize FastAPI app
 app = FastAPI()
 
@@ -30,12 +30,9 @@ limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
 app.add_middleware(SlowAPIMiddleware)
 
-# Gemini REST endpoint & API key
-API_KEY = os.environ["GEMINI_API_KEY"]
-GEMINI_URL = (
-    "https://generativelanguage.googleapis.com/v1beta/"
-    "models/gemini-2.0-flash:generateContent"
-)
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+if not client.api_key:
+    raise RuntimeError("Environment variable OPENAI_API_KEY must be set")
 
 
 def generate_linkedin_about(what: str, audience: str, diff: str) -> str:
@@ -52,40 +49,43 @@ def generate_linkedin_about(what: str, audience: str, diff: str) -> str:
         "Be professional yet personable, vary phrasing and structure, avoid generic buzzwords, and stay 100% truthful."
     )
 
-    payload = {
-        "contents": [{
-            "parts": [{"text": prompt}]
-        }],
-        "generationConfig": {"maxOutputTokens": 250}
-    }
-    resp = requests.post(f"{GEMINI_URL}?key={API_KEY}", json=payload)
-    resp.raise_for_status()
-    data = resp.json()
-    return data["candidates"][0]["content"]["parts"][0]["text"].strip()
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=250,
+        temperature=0.7,
+    )
+
+    if not response.choices or not hasattr(response.choices[0], "message"):
+        raise RuntimeError("OpenAI returned an unexpected response format")
+
+    return response.output_text
 
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-
 @app.post("/generate")
 @limiter.limit("5/day")
 async def generate(request: Request):
-    body = await request.json()
-    what = body.get("what")
-    audience = body.get("audience")
-    diff = body.get("diff")
-    if not all([what, audience, diff]):
-        raise HTTPException(
-            status_code=400,
-            detail="Missing one of 'what', 'audience', or 'diff'"
-        )
     try:
-        about = generate_linkedin_about(what, audience, diff)
+        body = await request.json()
+        what = body.get("what", "").strip()
+        audience = body.get("audience", "").strip()
+        diff = body.get("diff", "").strip()
+        if not all([what, audience, diff]):
+            raise HTTPException(
+                status_code=400,
+                detail="Missing one of 'what', 'audience', or 'diff'"
+            )
+
+        about_text = generate_linkedin_about(what, audience, diff)
+        return {"result": about_text}
+
     except Exception as e:
+        # Catch everything else (including RuntimeError from the OpenAI call)
         raise HTTPException(status_code=500, detail=str(e))
-    return {"result": about}
 
 
 # To run locally:
