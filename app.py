@@ -8,13 +8,14 @@ from flask_cors import CORS
 app = Flask(__name__, template_folder="templates")
 
 CORS(app)  # allow AJAX from same Repl URL
+redis_url = os.environ.get("REDIS_URL")
 
 
 limiter = Limiter(
+    app=app,
     key_func=get_remote_address,
-    storage_uri=os.environ["REDIS_URL"],
+    storage_uri=redis_url,
     default_limits=["5 per day"],
-    app=app
 )
 
 # Gemini REST endpoint & API key
