@@ -15,10 +15,10 @@ if not redis_url:
     raise RuntimeError("REDIS_URL environment variable not set")
 
 limiter = Limiter(
+    app,
     key_func=get_remote_address,
     storage_uri=redis_url,
     default_limits=["5 per day"],
-    app=app
 )
 
 # Gemini REST endpoint & API key
