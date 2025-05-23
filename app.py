@@ -21,7 +21,7 @@ limiter = Limiter(
     key_func=get_remote_address,
     storage_uri=redis_url,
     storage_options={"ssl_cert_reqs": ssl.CERT_NONE},
-    default_limits=["5 per day"],
+    # default_limits=["5 per day"],
 )
 
 # Gemini REST endpoint & API key
@@ -63,7 +63,7 @@ def index():
 
 
 @app.route("/generate", methods=["POST"])
-@limiter.limit("5 per day")
+@limiter.limit("5 per day", error_message="🚫 Daily limit reached—please log in to continue.")
 def generate():
     data = request.get_json()
     what = data.get("what")
