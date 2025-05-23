@@ -292,7 +292,7 @@
           body: JSON.stringify({ what: whatVal, audience: audienceVal, diff: diffVal })
         });
         const data = await res.json();
-        resultDiv.textContent = data.error ? `Error: ${data.error}` : data.result;
+        resultDiv.textContent = '🚫 You’ve hit the 5-requests-per-day limit. Please log in or upgrade to continue.';
       } catch(err) {
         resultDiv.textContent = `Fetch error: ${err}`;
       }
