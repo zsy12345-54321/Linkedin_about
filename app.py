@@ -63,7 +63,7 @@ def index():
 
 
 @app.route("/generate", methods=["POST"])
-@limiter.limit("5 per day", error_message="🚫 Daily limit reached—please log in to continue.")
+@limiter.limit("10 per day", error_message="🚫 Daily limit reached—please log in to continue.")
 def generate():
     data = request.get_json()
     what = data.get("what")
