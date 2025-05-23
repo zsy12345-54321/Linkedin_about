@@ -6,12 +6,17 @@ from flask_limiter.util import get_remote_address
 from flask_cors import CORS
 
 app = Flask(__name__, template_folder="templates")
+
 CORS(app)  # allow AJAX from same Repl URL
 
-# Rate limiter: max 5 requests per day per IP
-limiter = Limiter(app=app,
-                  key_func=get_remote_address,
-                  default_limits=["5 per day"])
+
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    storage_uri=os.environ["REDIS_URL"],
+    default_limits=["5 per day"],
+    app=app
+)
 
 # Gemini REST endpoint & API key
 API_KEY = os.environ["GEMINI_API_KEY"]
