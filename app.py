@@ -11,7 +11,6 @@ CORS(app)  # allow AJAX from same Repl URL
 
 
 limiter = Limiter(
-    app,
     key_func=get_remote_address,
     storage_uri=os.environ["REDIS_URL"],
     default_limits=["5 per day"],
