@@ -5,6 +5,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
+import ssl
 
 
 app = Flask(__name__, template_folder="templates")
@@ -18,6 +19,7 @@ limiter = Limiter(
     app,
     key_func=get_remote_address,
     storage_uri=redis_url,
+    storage_options={"ssl_cert_reqs": ssl.CERT_NONE},
     default_limits=["5 per day"],
 )
 
