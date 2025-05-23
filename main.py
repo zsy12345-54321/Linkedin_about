@@ -52,7 +52,7 @@ def generate_linkedin_about(what: str, audience: str, diff: str) -> str:
     response = client.chat.completions.create(
         model="gpt-4o",
         messages=[{"role": "user", "content": prompt}],
-        max_tokens=250,
+        max_tokens=100,
         temperature=0.7,
     )
 

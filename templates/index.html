@@ -268,43 +268,76 @@
 
   </main>
 
-  <script>
-    const form = document.getElementById('aboutForm');
-    const resultDiv = document.getElementById('output-text');
-    const copyBtn = document.getElementById('copy-btn');
+<script>
+  const form      = document.getElementById('aboutForm');
+  const resultDiv = document.getElementById('output-text');
+  const copyBtn   = document.getElementById('copy-btn');
 
-    form.addEventListener('submit', async e => {
-      e.preventDefault();
-      const whatVal = form.what.value.trim();
-      const audienceVal = form.audience.value.trim();
-      const diffVal = form.diff.value.trim();
+  // Utility: render a message to the output box
+  function showMessage(text) {
+    resultDiv.textContent = text;
+  }
 
-      if (!whatVal || !audienceVal || !diffVal) {
-        resultDiv.textContent = '⚠️ Please fill in all fields.';
-        return;
-      }
-      resultDiv.textContent = 'Generating…';
+  // Handle form submission
+  async function onSubmit(e) {
+    e.preventDefault();
+
+    const whatVal     = form.what.value.trim();
+    const audienceVal = form.audience.value.trim();
+    const diffVal     = form.diff.value.trim();
+
+    if (!whatVal || !audienceVal || !diffVal) {
+      return showMessage('⚠️ Please fill in all fields.');
+    }
+
+    showMessage('Generating…');
+
+    try {
+      const res = await fetch('/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ what: whatVal, audience: audienceVal, diff: diffVal })
+      });
+
+      const text = await res.text();
+      console.log('POST /generate status:', res.status);
+      console.log('Response body:', text);
+
+      let data;
       try {
-        const res = await fetch('/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ what: whatVal, audience: audienceVal, diff: diffVal })
-        });
-        const data = await res.json();
-        resultDiv.textContent = data.error ? `Error: ${data.error}` : data.result;
-        
-      } catch(err) {
-        resultDiv.textContent = `🚫 You’ve hit the 5-requests-per-day limit. Please log in or upgrade to continue.`;
+        data = JSON.parse(text);
+      } catch {
+        return showMessage('🚫 Invalid JSON response—see console');
       }
-    });
 
-    copyBtn.addEventListener('click', () => {
-      navigator.clipboard.writeText(resultDiv.textContent)
-        .then(() => copyBtn.textContent = 'Copied!')
-        .catch(() => copyBtn.textContent = 'Failed');
-      setTimeout(() => copyBtn.textContent = 'Copy', 1500);
-    });
-  </script>
+      if (!res.ok) {
+        // Show FastAPI error detail
+        const msg = data.detail || 'Unknown server error';
+        return showMessage(`🚫 ${msg}`);
+      }
+
+      // Success
+      showMessage(data.result);
+
+    } catch (err) {
+      console.error('Fetch error:', err);
+      showMessage('🚫 You’ve hit the 5-requests-per-day limit. Please log in or upgrade to continue.');
+    }
+  }
+
+  // Handle copy-to-clipboard
+  function onCopy() {
+    navigator.clipboard.writeText(resultDiv.textContent)
+      .then(() => copyBtn.textContent = 'Copied!')
+      .catch(() => copyBtn.textContent = 'Failed')
+      .finally(() => setTimeout(() => copyBtn.textContent = 'Copy', 1500));
+  }
+
+  // Attach listeners
+  form.addEventListener('submit', onSubmit);
+  copyBtn.addEventListener('click', onCopy);
+</script>
+
 
 </body>
 </html>
