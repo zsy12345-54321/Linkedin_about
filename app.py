@@ -4,18 +4,21 @@ from flask import Flask, request, jsonify, render_template
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_cors import CORS
+from werkzeug.middleware.proxy_fix import ProxyFix
+
 
 app = Flask(__name__, template_folder="templates")
-
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1)
 CORS(app)  # allow AJAX from same Repl URL
 redis_url = os.environ.get("REDIS_URL")
-
+if not redis_url:
+    raise RuntimeError("REDIS_URL environment variable not set")
 
 limiter = Limiter(
-    app=app,
     key_func=get_remote_address,
     storage_uri=redis_url,
     default_limits=["5 per day"],
+    app=app
 )
 
 # Gemini REST endpoint & API key
