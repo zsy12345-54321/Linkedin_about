@@ -36,30 +36,49 @@ if not client.api_key:
 
 
 def generate_linkedin_about(what: str, audience: str, diff: str) -> str:
-    prompt = (
-        f"You are a professional LinkedIn copywriter. Write exactly one concise “About” section in first person "
-        f"(3–5 short paragraphs, no more than 200 tokens total, no less than 100 tokens), ready to copy-and-paste directly "
-        f"into LinkedIn. Use an engaging hook, then introduce the user (“I am…”), explain what they do and who benefits, "
-        f"highlight their unique differentiator, and close with a friendly call-to-action.\n"
-        f"Do not include multiple versions—only the “About” text itself.\n"
-        f"Use ONLY these facts—no invented details:\n"
+    # prompt = (
+    #     f"You are a professional LinkedIn copywriter. Write exactly one concise “About” section in first person "
+    #     f"(3–5 short paragraphs, no more than 200 tokens total, no less than 100 tokens), ready to copy-and-paste directly "
+    #     f"into LinkedIn. Use an engaging hook, then introduce the user (“I am…”), explain what they do and who benefits, "
+    #     f"highlight their unique differentiator, and close with a friendly call-to-action.\n"
+    #     f"Do not include multiple versions—only the “About” text itself.\n"
+    #     f"Use ONLY these facts—no invented details:\n"
+    #     f"- What I do: {what}\n"
+    #     f"- Target audience: {audience}\n"
+    #     f"- Differentiator: {diff}\n\n"
+    #     "Be professional yet personable, vary phrasing and structure, avoid generic buzzwords, and stay 100% truthful."
+    # )
+    system_msg = (
+        "You are a professional LinkedIn copywriter. "
+        "Your job is to write a single, concise “About” section in first person."
+        "Write one About section (3–5 short paragraphs, 100–200 tokens total) ready for LinkedIn."
+        "Be professional yet personable, avoid buzzwords, and stay 100% truthful."
+    )
+
+    user_msg = (
+        f"Open with an engaging hook; then introduce yourself (“I am…”), explain what you do and who benefits, "
+        f"highlight your unique differentiator, and close with a friendly call-to-action. "
+        f"Do not include multiple versions—only the final About text. "
+        f"Use ONLY these facts (no invented details):\n"
         f"- What I do: {what}\n"
         f"- Target audience: {audience}\n"
-        f"- Differentiator: {diff}\n\n"
-        "Be professional yet personable, vary phrasing and structure, avoid generic buzzwords, and stay 100% truthful."
+        f"- Unique differentiator: {diff}\n"
     )
 
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": prompt}],
-        max_tokens=250,
+        messages=[
+            {"role": "system",  "content": system_msg},
+            {"role": "user",    "content": user_msg},
+        ],
+        max_tokens=200,
         temperature=0.7,
     )
 
     if not response.choices or not hasattr(response.choices[0], "message"):
         raise RuntimeError("OpenAI returned an unexpected response format")
 
-    return response.output_text
+    return response.choices[0].message.content.strip()
 
 
 @app.get("/", response_class=HTMLResponse)
