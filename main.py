@@ -60,7 +60,7 @@ def generate_linkedin_about(what: str, audience: str, diff: str) -> str:
         "Keep it to 3–5 short paragraphs, 100–200 words. "
         "Follow this structure:\n"
         "1. Start with a hook that quickly summarizes the user's role or value.\n"
-        "2. Introduce yourself and clearly state what you do and who you help.\n"
+        "2. Introduce yourself (“I am…”) and clearly state what you do and who you help.\n"
         "3. Briefly highlight what makes you unique or different (your differentiator).\n"
         "4. End with a friendly, professional call-to-action inviting readers to connect or reach out.\n"
         "Do NOT invent any details or include multiple versions. "
@@ -69,8 +69,9 @@ def generate_linkedin_about(what: str, audience: str, diff: str) -> str:
         f"- Target audience: {audience}\n"
         f"- Unique differentiator: {diff}\n\n"
         "Write in a natural, conversational tone, and avoid generic statements or clichés. "
-        "Vary sentence structure and avoid starting every paragraph with 'I.' "
-        "Use some contractions and write as if you’re talking to the reader. A little personality is great!"
+        "Write as if you’re truly speaking to the reader, in a warm and relatable way."
+        "Vary your sentence structure and word choice; avoid starting every paragraph with 'I.' "
+        "Use occasional contractions, and write as if you’re speaking directly to the reader. "
     )
 
     response = client.chat.completions.create(
