@@ -49,20 +49,28 @@ def generate_linkedin_about(what: str, audience: str, diff: str) -> str:
     #     "Be professional yet personable, vary phrasing and structure, avoid generic buzzwords, and stay 100% truthful."
     # )
     system_msg = (
-        "You are a professional LinkedIn copywriter. "
-        "Your job is to write a single, concise “About” section in first person."
-        "Write one About section (3–5 short paragraphs, 100–200 tokens total) ready for LinkedIn."
-        "Be professional yet personable, avoid buzzwords, and stay 100% truthful."
+        "You are an expert LinkedIn copywriter. "
+        "Your job is to write a single, compelling 'About' section for a LinkedIn profile, written in first person. "
+        "Be concise, personable, and avoid exaggeration or buzzwords. "
+        "The section should sound authentic, as if written by a real human, and be ready to paste directly into LinkedIn."
     )
 
     user_msg = (
-        f"Open with an engaging hook; then introduce yourself (“I am…”), explain what you do and who benefits, "
-        f"highlight your unique differentiator, and close with a friendly call-to-action. "
-        f"Do not include multiple versions—only the final About text. "
-        f"Use ONLY these facts (no invented details):\n"
+        "Please write a LinkedIn 'About' section (summary) using only the information provided below. "
+        "Keep it to 3–5 short paragraphs, 100–200 words. "
+        "Follow this structure:\n"
+        "1. Start with a hook that quickly summarizes the user's role or value.\n"
+        "2. Introduce yourself and clearly state what you do and who you help.\n"
+        "3. Briefly highlight what makes you unique or different (your differentiator).\n"
+        "4. End with a friendly, professional call-to-action inviting readers to connect or reach out.\n"
+        "Do NOT invent any details or include multiple versions. "
+        "Here are the facts you must use:\n"
         f"- What I do: {what}\n"
         f"- Target audience: {audience}\n"
-        f"- Unique differentiator: {diff}\n"
+        f"- Unique differentiator: {diff}\n\n"
+        "Write in a natural, conversational tone, and avoid generic statements or clichés. "
+        "Vary sentence structure and avoid starting every paragraph with 'I.' "
+        "Use some contractions and write as if you’re talking to the reader. A little personality is great!"
     )
 
     response = client.chat.completions.create(
@@ -72,7 +80,7 @@ def generate_linkedin_about(what: str, audience: str, diff: str) -> str:
             {"role": "user",    "content": user_msg},
         ],
         max_tokens=200,
-        temperature=0.7,
+        temperature=0.8,
     )
 
     if not response.choices or not hasattr(response.choices[0], "message"):
